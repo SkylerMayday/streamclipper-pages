@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>StreamClipper — Connecting...</title>
+  <style>
+    body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #0f0f0f; color: #fff; }
+    .box { text-align: center; max-width: 400px; }
+    h2 { margin-bottom: 8px; }
+    p { color: #aaa; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2 id="msg">Connecting to StreamClipper...</h2>
+    <p id="sub">Forwarding authorization to the app. You can close this tab once it completes.</p>
+  </div>
+  <script>
+    const params = window.location.search;
+    const qs = new URLSearchParams(params);
+    const code = qs.get('code');
+    const error = qs.get('error');
+
+    if (error) {
+      document.getElementById('msg').textContent = 'Authorization failed';
+      document.getElementById('sub').textContent = 'TikTok returned: ' + error;
+    } else if (code) {
+      // Forward all params to the local StreamClipper server
+      const target = 'http://127.0.0.1:8181/callback' + params;
+      window.location.href = target;
+    } else {
+      document.getElementById('msg').textContent = 'No authorization code received';
+      document.getElementById('sub').textContent = 'Please try again from the StreamClipper app.';
+    }
+  </script>
+</body>
+</html>
